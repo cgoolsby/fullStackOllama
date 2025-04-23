@@ -25,7 +25,7 @@ provider "aws" {
 # EKS Cluster
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
+  version = "19.21.0"
 
   cluster_name    = var.cluster_name
   cluster_version = "1.31"
@@ -49,7 +49,7 @@ module "eks" {
       min_size     = 0
       max_size     = 2
 
-      instance_types = ["g4dn.xlarge"]  # GPU instance type
+      instance_types = ["g4dn.xlarge"] # GPU instance type
       capacity_type  = "ON_DEMAND"
 
       labels = {

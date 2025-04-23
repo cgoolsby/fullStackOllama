@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.86.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+      - id: terraform_tflint
+
+  - repo: local
+    hooks:
+      - id: terraform-validate
+        name: Terraform Validate
+        entry: scripts/terraform-validate.sh
+        language: script
+        files: \.tf$
+        pass_filenames: false
+
+      - id: validate-crds
+        name: Validate CRDs
+        entry: scripts/validate-crds.sh
+        language: script
+        files: ^crds/.*\.yaml$
+        pass_filenames: true
+
+      - id: validate-model-definitions
+        name: Validate Model Definitions
+        entry: scripts/validate-model-definitions.sh
+        language: script
+        files: ^models/.*\.yaml$
+        pass_filenames: true
