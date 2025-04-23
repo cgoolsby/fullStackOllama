@@ -34,35 +34,38 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets
 
   # Enable EKS Managed Node Groups
-  eks_managed_node_groups = {
-    general = {
-      desired_size = 2
-      min_size     = 1
-      max_size     = 3
+  eks_managed_node_groups = merge(
+    {
+      general = {
+        desired_size = 2
+        min_size     = 1
+        max_size     = 3
 
-      instance_types = ["t3.large"]
-      capacity_type  = "ON_DEMAND"
-    }
-
-    gpu = {
-      desired_size = 1
-      min_size     = 0
-      max_size     = 2
-
-      instance_types = ["g4dn.xlarge"] # GPU instance type
-      capacity_type  = "ON_DEMAND"
-
-      labels = {
-        "nvidia.com/gpu" = "true"
+        instance_types = ["t3.large"]
+        capacity_type  = "ON_DEMAND"
       }
+    },
+    var.enable_gpu_nodes ? {
+      gpu = {
+        desired_size = 1
+        min_size     = 0
+        max_size     = 2
 
-      taints = [{
-        key    = "nvidia.com/gpu"
-        value  = "true"
-        effect = "NO_SCHEDULE"
-      }]
-    }
-  }
+        instance_types = ["g4dn.xlarge"] # GPU instance type
+        capacity_type  = "ON_DEMAND"
+
+        labels = {
+          "nvidia.com/gpu" = "true"
+        }
+
+        taints = [{
+          key    = "nvidia.com/gpu"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }]
+      }
+    } : {}
+  )
 
   tags = var.tags
 }
