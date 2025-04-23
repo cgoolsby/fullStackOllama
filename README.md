@@ -106,10 +106,10 @@ spec:
   modelDefinition:
     name: summarizer-model
     version: "1.0.0"
-  
+
   # Core agent configuration
   role: summarizer
-  
+
   # A2A protocol implementation
   agentCard:
     capabilities:
@@ -118,13 +118,13 @@ spec:
     endpoint: "/api/v1/agent"
     authentication:
       type: "bearer"
-      
+
   # Resource requirements
   resources:
     gpu: 1
     memory: "8Gi"
     cpu: "2"
-    
+
   # A2A server configuration
   server:
     streaming: true
@@ -132,7 +132,7 @@ spec:
     webhookConfig:
       retryPolicy: exponential
       maxRetries: 3
-    
+
   # Model-specific settings
   modelConfig:
     temperature: 0.7
@@ -152,7 +152,7 @@ metadata:
 spec:
   # Base model configuration
   from: llama2
-  
+
   # Model build parameters
   build:
     # System prompt defining agent behavior
@@ -161,27 +161,27 @@ spec:
       1. Extracting key information from documents
       2. Creating concise summaries
       3. Identifying main themes and topics
-      
+
     # Parameters for model behavior
     parameters:
       temperature: 0.7
       contextWindow: 4096
       responseFormat: json
-      
+
     # Model adaptation and fine-tuning
     template: |
       {{ if .System }}{{.System}}{{ end }}
-      
+
       Context: {{.Input}}
-      
+
       Instructions: Create a summary that includes:
       - Main points
       - Key findings
       - Action items
-      
+
       Response format:
       {{.ResponseFormat}}
-    
+
     # Custom function definitions
     functions:
       - name: extract_key_points
@@ -197,19 +197,19 @@ spec:
               type: array
               items:
                 type: string
-    
+
     # Model tags for versioning and identification
     tags:
       version: "1.0.0"
       type: "summarizer"
       capabilities: ["text-analysis", "summarization"]
-    
+
     # Resource requirements for build process
     buildResources:
       gpu: 1
       memory: "16Gi"
       cpu: "4"
-      
+
 status:
   phase: Building # Building, Complete, Failed
   buildStartTime: "2025-04-23T13:30:00Z"
@@ -236,7 +236,7 @@ spec:
   input:
     text: "Analyze and summarize this document"
     format: "text/plain"
-  
+
   # A2A task workflow
   pipeline:
     - name: document-analyzer
@@ -246,26 +246,26 @@ spec:
       artifacts:
         - name: analysis-result
           type: "application/json"
-    
+
     - name: summarizer
       agentRef: summarizer-agent
       dependsOn: ["document-analyzer"]
       inputFrom:
         - taskRef: document-analyzer
           artifactName: analysis-result
-      
+
     - name: quality-check
       agentRef: qa-agent
       dependsOn: ["summarizer"]
       condition: "success"
-  
+
   # A2A protocol settings
   communication:
     streaming: true
     pushNotifications:
       enabled: true
       endpoint: "http://callback-service/webhook"
-    
+
   # Output configuration
   output:
     storage:
@@ -275,7 +275,7 @@ spec:
     format:
       - type: "application/json"
       - type: "text/markdown"
-    
+
   # Error handling
   errorPolicy:
     maxRetries: 3
@@ -287,7 +287,7 @@ spec:
 
 The controllers implement the A2A protocol's core functionality:
 
-1. **Agent Discovery**: 
+1. **Agent Discovery**:
    - Automatically generates and manages `.well-known/agent.json` endpoints
    - Handles capability registration and updates
    - Manages agent metadata and health checks
@@ -306,6 +306,96 @@ The controllers implement the A2A protocol's core functionality:
    - GPU allocation and scheduling
    - Memory and compute resource management
    - Model loading and unloading
+
+---
+
+## 🔍 Development Setup
+
+### Development Environment
+
+We provide a consistent development environment using VS Code Dev Containers. This ensures all developers have the same tools and versions.
+
+1. **Prerequisites**:
+   - [Docker](https://www.docker.com/products/docker-desktop)
+   - [VS Code](https://code.visualstudio.com/)
+   - [Remote - Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+2. **Getting Started**:
+   ```bash
+   # Clone the repository
+   git clone https://github.com/yourusername/fullStackOllama.git
+   cd fullStackOllama
+
+   # Open in VS Code
+   code .
+
+   # Click "Reopen in Container" when prompted
+   # or use Command Palette (F1) -> "Remote-Containers: Reopen in Container"
+   ```
+
+The dev container includes:
+- All required development tools
+- Pre-configured pre-commit hooks
+- VS Code extensions for Terraform, Go, and Kubernetes
+- AWS and Kubernetes config mounting
+
+Alternatively, if you prefer local installation:
+
+### Pre-commit Hooks
+
+This repository uses pre-commit hooks to ensure code quality and consistency. The following checks are performed before each commit:
+
+1. **General Checks**
+   - Trailing whitespace removal
+   - End of file fixing
+   - YAML syntax validation
+   - Large file checks
+   - Merge conflict detection
+   - Private key detection
+
+2. **Terraform Checks**
+   - Format validation (`terraform fmt`)
+   - Configuration validation (`terraform validate`)
+   - Documentation updates
+   - Security scanning (Checkov)
+   - Linting (TFLint)
+
+3. **Go Code Checks**
+   - Format validation (`go fmt`)
+   - Code analysis (`go vet`)
+   - Comprehensive linting (golangci-lint)
+
+4. **Custom Validations**
+   - CRD syntax and structure validation
+   - Model definition validation
+   - Kubernetes resource validation
+
+### Setup Instructions
+
+1. Install pre-commit:
+   ```bash
+   brew install pre-commit
+   ```
+
+2. Install required tools:
+   ```bash
+   brew install terraform-docs tflint checkov
+   go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+   ```
+
+3. Install the pre-commit hooks:
+   ```bash
+   pre-commit install
+   ```
+
+4. (Optional) Run against all files:
+   ```bash
+   pre-commit run --all-files
+   ```
+
+### Continuous Integration
+
+The same checks are run in CI/CD pipelines to ensure consistency. See the GitHub Actions workflows for details.
 
 ---
 
