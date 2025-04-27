@@ -16,4 +16,3 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: terraform-outputs
-        namespace: kube-system
