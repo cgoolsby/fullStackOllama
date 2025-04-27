@@ -511,24 +511,50 @@ The model building process follows GitOps principles, ensuring that all changes 
 
 - Kubernetes cluster with GPU-enabled nodes (AWS EKS, GKE, or bare-metal)
 - NVIDIA GPU Operator installed
-- Flux installed and watching this repository
 - Kubectl + Kustomize + Helm
 - Golang (for controller development)
 
 ### Deployment Steps
 
+1. **Set up Infrastructure**
 ```bash
-# 1. Bootstrap cluster
-cd infra/overlays/dev
-kustomize build . | kubectl apply -f -
+# Deploy the EKS cluster using Terraform
+cd infra/cluster-iac
+terraform init
+terraform apply
+```
 
-# 2. Apply CRDs
+2. **Bootstrap Flux**
+
+The repository includes a bootstrap script to set up Flux with the correct configuration:
+
+```bash
+# Option 1: Using environment variable
+export GITHUB_TOKEN=your_github_token
+./scripts/bootstrap-flux.sh
+
+# Option 2: Passing token directly
+./scripts/bootstrap-flux.sh -t your_github_token
+
+# Additional options available:
+./scripts/bootstrap-flux.sh -h  # Show help
+```
+
+The bootstrap script will:
+- Install Flux CLI if not present
+- Clean up any existing Flux installation
+- Configure Flux with your GitHub repository
+- Set up monitoring and logging components
+- Verify the installation and show status
+
+3. **Apply CRDs**
+```bash
 kubectl apply -f crds/
 
-# 3. Deploy example agents
+4. **Deploy example agents**
 kubectl apply -f ollama-operators/service-deployments/
 
-# 4. Submit an orchestration task
+5. **Submit an orchestration task**
 kubectl apply -f examples/question-answering/task.yaml
 ```
 
