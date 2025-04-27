@@ -56,7 +56,7 @@ if ! command -v flux &>/dev/null; then
 fi
 
 echo "🧹 Cleaning up any existing Flux installation..."
-flux uninstall --silent || true
+flux uninstall --keep-namespace --silent || true
 
 echo "🚀 Bootstrapping Flux..."
 flux bootstrap github \
