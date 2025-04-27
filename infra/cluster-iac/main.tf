@@ -40,7 +40,7 @@ data "aws_caller_identity" "current" {}
 resource "kubernetes_config_map" "terraform_outputs" {
   metadata {
     name      = "terraform-outputs"
-    namespace = "kube-system"
+    namespace = "flux-system"
   }
 
   data = {
@@ -48,7 +48,10 @@ resource "kubernetes_config_map" "terraform_outputs" {
     EBS_CSI_ROLE_ARN = aws_iam_role.ebs_csi_role.arn
   }
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    kubernetes_namespace.flux_system
+  ]
 }
 
 # EKS Cluster
