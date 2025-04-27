@@ -3,30 +3,12 @@ kind: Kustomization
 resources:
   - helmrelease.yaml
 
-patches:
-  - path: patch-role-arn.yaml
-    target:
-      kind: HelmRelease
-      name: aws-ebs-csi-driver
-
-replacements:
-  - source:
+vars:
+  - name: EBS_CSI_ROLE_ARN
+    objref:
       kind: ConfigMap
       name: terraform-outputs
       namespace: kube-system
-    targets:
-      - select:
-          kind: HelmRelease
-          name: aws-ebs-csi-driver
-        fieldPaths:
-          - spec.values.controller.serviceAccount.annotations.eks\.amazonaws\.com/role-arn
-          - spec.values.node.serviceAccount.annotations.eks\.amazonaws\.com/role-arn
-        options:
-          create: true
-          delimiter: ${}
-    sourceRef:
       apiVersion: v1
-      kind: ConfigMap
-      name: terraform-outputs
-      namespace: kube-system
-      fieldPath: data.EBS_CSI_ROLE_ARN
+    fieldref:
+      fieldpath: data.EBS_CSI_ROLE_ARN

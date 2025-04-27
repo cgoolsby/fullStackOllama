@@ -21,13 +21,13 @@ spec:
         create: true
         name: ebs-csi-controller-sa
         annotations:
-          eks.amazonaws.com/role-arn: "${EBS_CSI_ROLE_ARN}"
+          eks.amazonaws.com/role-arn: $(EBS_CSI_ROLE_ARN)
     node:
       serviceAccount:
         create: true
         name: ebs-csi-node-sa
         annotations:
-          eks.amazonaws.com/role-arn: "${EBS_CSI_ROLE_ARN}"
+          eks.amazonaws.com/role-arn: $(EBS_CSI_ROLE_ARN)
     storageClasses:
       - name: ebs-sc
         annotations:
