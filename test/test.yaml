@@ -1,0 +1,11 @@
+apiVersion: ai.stack/v1alpha1
+kind: OllamaModelDefinition   
+metadata:
+  name: test-model
+spec:
+  from: llama2
+  build: 
+    system: |
+      You are a test agent...
+  
+  
