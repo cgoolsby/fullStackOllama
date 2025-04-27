@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: flux-system
 
 resources:
-  - namespace.yaml
   - gotk-components.yaml
   - gotk-sync.yaml
   - helm-repositories.yaml
