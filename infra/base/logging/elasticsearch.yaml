@@ -47,6 +47,8 @@ spec:
             roles: superuser
             authz_exception: false
     extraEnvs:
+      - name: ELASTIC_USERNAME
+        value: "elastic"
       - name: ELASTIC_PASSWORD
         valueFrom:
           secretKeyRef:
