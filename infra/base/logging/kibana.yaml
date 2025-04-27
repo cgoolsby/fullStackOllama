@@ -35,9 +35,9 @@ spec:
         server.name: kibana
         server.host: "0.0.0.0"
         elasticsearch.hosts: [ "https://elasticsearch-master:9200" ]
-        elasticsearch.ssl.certificateAuthorities: [ "/usr/share/elasticsearch/config/certs/ca.crt" ]
-        elasticsearch.ssl.certificate: "/usr/share/elasticsearch/config/certs/tls.crt"
-        elasticsearch.ssl.key: "/usr/share/elasticsearch/config/certs/tls.key"
+        elasticsearch.ssl.certificateAuthorities: [ "/usr/share/kibana/config/certs/ca.crt" ]
+        elasticsearch.ssl.certificate: "/usr/share/kibana/config/certs/tls.crt"
+        elasticsearch.ssl.key: "/usr/share/kibana/config/certs/tls.key"
         monitoring.ui.container.elasticsearch.enabled: true
     extraEnvs:
       - name: ELASTICSEARCH_PASSWORD
@@ -47,11 +47,3 @@ spec:
             key: password
       - name: ELASTICSEARCH_USERNAME
         value: "elastic"
-    extraVolumes:
-      - name: elasticsearch-certs
-        secret:
-          secretName: elasticsearch-master-certs
-    extraVolumeMounts:
-      - name: elasticsearch-certs
-        mountPath: /usr/share/elasticsearch/config/certs
-        readOnly: true
