@@ -14,7 +14,7 @@ spec:
         name: elastic
         namespace: flux-system
   values:
-    elasticsearchHosts: "http://elasticsearch-master:9200"
+    elasticsearchHosts: "https://elasticsearch-master:9200"
     resources:
       requests:
         cpu: "500m"
@@ -34,5 +34,6 @@ spec:
       kibana.yml: |
         server.name: kibana
         server.host: "0.0.0.0"
-        elasticsearch.hosts: [ "http://elasticsearch-master:9200" ]
+        elasticsearch.hosts: [ "https://elasticsearch-master:9200" ]
+        elasticsearch.ssl.verificationMode: none
         monitoring.ui.container.elasticsearch.enabled: true
