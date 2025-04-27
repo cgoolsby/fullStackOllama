@@ -33,3 +33,12 @@ metadata:
 spec:
   interval: 1h
   url: https://fluent.github.io/helm-charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: aws-ebs-csi-driver
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://kubernetes-sigs.github.io/aws-ebs-csi-driver

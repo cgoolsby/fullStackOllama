@@ -25,7 +25,7 @@ spec:
         memory: "4Gi"
     persistence:
       enabled: true
-      storageClass: gp2
+      storageClass: ebs-sc
       size: 30Gi
     protocol: https
     secret:

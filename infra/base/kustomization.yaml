@@ -5,6 +5,7 @@ resources:
   - monitoring.yaml
   - gpu-operator.yaml
   - logging.yaml
+  - aws-ebs-csi.yaml
 
 commonLabels:
   app.kubernetes.io/managed-by: kustomize
