@@ -13,6 +13,7 @@ spec:
   dependsOn:
     - name: flux-system
   postBuild:
-    substitute:
-      AWS_ACCOUNT_ID: "${AWS_ACCOUNT_ID}"
-      EBS_CSI_ROLE_ARN: "${EBS_CSI_ROLE_ARN}"
+    substituteFrom:
+      - kind: ConfigMap
+        name: terraform-outputs
+        namespace: kube-system
