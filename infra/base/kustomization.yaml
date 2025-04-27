@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - monitoring.yaml
+  - gpu-operator.yaml
+  - logging.yaml
 
 commonLabels:
   app.kubernetes.io/managed-by: kustomize
