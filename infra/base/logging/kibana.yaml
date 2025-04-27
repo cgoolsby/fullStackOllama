@@ -27,7 +27,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: nginx
       hosts:
-        - host: kibana.cluster.local  # Update this for your domain
+        - host: kibana.cluster.local
           paths:
             - path: /
     kibanaConfig:
@@ -35,5 +35,23 @@ spec:
         server.name: kibana
         server.host: "0.0.0.0"
         elasticsearch.hosts: [ "https://elasticsearch-master:9200" ]
-        elasticsearch.ssl.verificationMode: none
+        elasticsearch.ssl.certificateAuthorities: [ "/usr/share/elasticsearch/config/certs/ca.crt" ]
+        elasticsearch.ssl.certificate: "/usr/share/elasticsearch/config/certs/tls.crt"
+        elasticsearch.ssl.key: "/usr/share/elasticsearch/config/certs/tls.key"
         monitoring.ui.container.elasticsearch.enabled: true
+    extraEnvs:
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-credentials
+            key: password
+      - name: ELASTICSEARCH_USERNAME
+        value: "elastic"
+    extraVolumes:
+      - name: elasticsearch-certs
+        secret:
+          secretName: elasticsearch-master-certs
+    extraVolumeMounts:
+      - name: elasticsearch-certs
+        mountPath: /usr/share/elasticsearch/config/certs
+        readOnly: true

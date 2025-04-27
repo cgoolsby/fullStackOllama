@@ -27,13 +27,29 @@ spec:
       enabled: true
       size: 30Gi
     protocol: https
+    secret:
+      enabled: true
+      password: "changeme"  # Change this in production
     esConfig:
       elasticsearch.yml: |
         xpack.security.enabled: true
         xpack.security.transport.ssl.enabled: true
         xpack.security.http.ssl.enabled: true
+        xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/tls.key
+        xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/tls.crt
+        xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca.crt" ]
+        xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/tls.key
+        xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/tls.crt
+        xpack.security.transport.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca.crt" ]
         xpack.security.authc:
           anonymous:
             username: anonymous
             roles: superuser
             authz_exception: false
+    extraEnvs:
+      - name: ELASTIC_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-credentials
+            key: password
+    createCerts: true  # This will create self-signed certificates
