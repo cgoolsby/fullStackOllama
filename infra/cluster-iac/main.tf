@@ -22,8 +22,34 @@ provider "aws" {
   region = var.region
 }
 
+# Configure the Kubernetes provider
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+  }
+}
+
 # Get AWS account ID
 data "aws_caller_identity" "current" {}
+
+# Create ConfigMap for Terraform outputs
+resource "kubernetes_config_map" "terraform_outputs" {
+  metadata {
+    name      = "terraform-outputs"
+    namespace = "kube-system"
+  }
+
+  data = {
+    AWS_ACCOUNT_ID    = data.aws_caller_identity.current.account_id
+    EBS_CSI_ROLE_ARN = aws_iam_role.ebs_csi_role.arn
+  }
+
+  depends_on = [module.eks]
+}
 
 # EKS Cluster
 module "eks" {
