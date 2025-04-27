@@ -22,6 +22,9 @@ provider "aws" {
   region = var.region
 }
 
+# Get AWS account ID
+data "aws_caller_identity" "current" {}
+
 # EKS Cluster
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -32,6 +35,9 @@ module "eks" {
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
+
+  # Enable OIDC provider for IRSA
+  enable_irsa = true
 
   # Cluster endpoint configuration
   cluster_endpoint_public_access       = true
