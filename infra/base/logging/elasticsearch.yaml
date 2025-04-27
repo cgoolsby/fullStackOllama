@@ -25,6 +25,7 @@ spec:
         memory: "4Gi"
     persistence:
       enabled: true
+      storageClass: gp2
       size: 30Gi
     protocol: https
     secret:
