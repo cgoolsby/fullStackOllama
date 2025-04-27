@@ -48,6 +48,13 @@ spec:
             Index ollama-logs
             Generate_ID On
             Suppress_Type_Name On
+            HTTP_User elastic
+            HTTP_Passwd ${FLUENT_ELASTICSEARCH_PASSWORD}
+            tls On
+            tls.verify Off
+            tls.ca_file /fluent-bit/ssl/ca.crt
+            tls.crt_file /fluent-bit/ssl/tls.crt
+            tls.key_file /fluent-bit/ssl/tls.key
             
     tolerations:
       - operator: Exists
@@ -58,3 +65,20 @@ spec:
       requests:
         cpu: 100m
         memory: 200Mi
+
+    extraVolumeMounts:
+      - name: elasticsearch-certs
+        mountPath: /fluent-bit/ssl/
+        readOnly: true
+
+    extraVolumes:
+      - name: elasticsearch-certs
+        secret:
+          secretName: elasticsearch-master-certs
+
+    env:
+      - name: FLUENT_ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-credentials
+            key: password
