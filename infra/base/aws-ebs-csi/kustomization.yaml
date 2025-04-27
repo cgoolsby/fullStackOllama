@@ -2,13 +2,3 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - helmrelease.yaml
-
-vars:
-  - name: EBS_CSI_ROLE_ARN
-    objref:
-      kind: ConfigMap
-      name: terraform-outputs
-      namespace: kube-system
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.EBS_CSI_ROLE_ARN
