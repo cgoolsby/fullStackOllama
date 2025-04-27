@@ -29,8 +29,7 @@ spec:
       size: 30Gi
     protocol: https
     secret:
-      enabled: true
-      password: "changeme"  # Change this in production
+      enabled: false  # We're using external secret instead
     esConfig:
       elasticsearch.yml: |
         xpack.security.enabled: true
