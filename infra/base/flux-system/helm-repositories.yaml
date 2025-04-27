@@ -1,0 +1,35 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: nvidia
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://nvidia.github.io/gpu-operator
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: elastic
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://helm.elastic.co
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: fluent
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://fluent.github.io/helm-charts

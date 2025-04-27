@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: elasticsearch
+  namespace: logging
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: elasticsearch
+      version: "8.5.1"  # Update to latest stable version as needed
+      sourceRef:
+        kind: HelmRepository
+        name: elastic
+        namespace: flux-system
+  values:
+    replicas: 1  # Increase for production
+    minimumMasterNodes: 1
+    resources:
+      requests:
+        cpu: "1000m"
+        memory: "2Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+    persistence:
+      enabled: true
+      size: 30Gi
+    esConfig:
+      elasticsearch.yml: |
+        xpack.security.enabled: true
+        xpack.security.authc:
+          anonymous:
+            username: anonymous
+            roles: superuser
+            authz_exception: false

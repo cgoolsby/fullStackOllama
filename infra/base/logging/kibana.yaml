@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kibana
+  namespace: logging
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kibana
+      version: "8.5.1"  # Match Elasticsearch version
+      sourceRef:
+        kind: HelmRepository
+        name: elastic
+        namespace: flux-system
+  values:
+    elasticsearchHosts: "http://elasticsearch-master:9200"
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "1000m"
+        memory: "2Gi"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      hosts:
+        - host: kibana.cluster.local  # Update this for your domain
+          paths:
+            - path: /
+    kibanaConfig:
+      kibana.yml: |
+        server.name: kibana
+        server.host: "0.0.0.0"
+        elasticsearch.hosts: [ "http://elasticsearch-master:9200" ]
+        monitoring.ui.container.elasticsearch.enabled: true
