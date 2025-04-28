@@ -35,7 +35,7 @@ spec:
         [OUTPUT]
             Name es
             Match kube.*
-            Host https://elasticsearch-master
+            Host elasticsearch-master
             Port 9200
             HTTP_User ${ELASTICSEARCH_USERNAME}
             HTTP_Passwd ${ELASTICSEARCH_PASSWORD}
@@ -45,8 +45,18 @@ spec:
             Time_Key @timestamp
             Replace_Dots On
             tls On
-            tls.verify Off
-            tls.debug 1
+            tls.verify On
+            tls.ca_file /certs/ca.crt
+            tls.crt_file /certs/tls.crt
+            tls.key_file /certs/tls.key
+    extraVolumeMounts:
+      - name: es-certs
+        mountPath: /certs
+        readOnly: true
+    extraVolumes:
+      - name: es-certs
+        secret:
+          secretName: elasticsearch-master-certs
     env:
       - name: ELASTICSEARCH_USERNAME
         valueFrom:
