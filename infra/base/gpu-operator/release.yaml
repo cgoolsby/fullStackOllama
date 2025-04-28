@@ -20,11 +20,15 @@ spec:
       enabled: true
     toolkit:
       enabled: true
+      version: "v1.13.5-centos7"  # Specify older version compatible with lower GLIBC
     devicePlugin:
       enabled: true
       config:
         name: gpu-feature-discovery
         version: v0.7.0
+    gfd:
+      enabled: true
+      migStrategy: "none"
     validator:
       driver:
         env:
