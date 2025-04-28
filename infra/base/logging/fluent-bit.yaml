@@ -14,6 +14,40 @@ spec:
         name: fluent
         namespace: flux-system
   values:
+    config:
+      inputs: |
+        [INPUT]
+            Name tail
+            Path /var/log/containers/*.log
+            Parser docker
+            Tag kube.*
+            Mem_Buf_Limit 5MB
+            Skip_Long_Lines On
+      filters: |
+        [FILTER]
+            Name kubernetes
+            Match kube.*
+            Merge_Log On
+            Keep_Log Off
+            K8S-Logging.Parser On
+            K8S-Logging.Exclude On
+      outputs: |
+        [OUTPUT]
+            Name es
+            Match kube.*
+            Host elasticsearch-master
+            Port 9200
+            HTTP_User ${ELASTICSEARCH_USERNAME}
+            HTTP_Passwd ${ELASTICSEARCH_PASSWORD}
+            Logstash_Format On
+            Retry_Limit False
+            Type flb_type
+            Time_Key @timestamp
+            Replace_Dots On
+            tls On
+            tls.verify Off
+            tls.debug 1
+            HTTP_SSL On
     env:
       - name: ELASTICSEARCH_USERNAME
         valueFrom:
