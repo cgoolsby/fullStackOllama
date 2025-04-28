@@ -15,8 +15,6 @@ spec:
         namespace: flux-system
   values:
     replicas: 1
-    service:
-      type: LoadBalancer
     volumeClaimTemplate:
       storageClassName: ebs-sc
     persistence:
