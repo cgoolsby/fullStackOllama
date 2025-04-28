@@ -41,9 +41,9 @@ spec:
             HTTP_Passwd ${ELASTICSEARCH_PASSWORD}
             Logstash_Format On
             Retry_Limit False
-            Type flb_type
             Time_Key @timestamp
             Replace_Dots On
+            Suppress_Type_Name On
             tls On
             tls.verify On
             tls.ca_file /certs/ca.crt
