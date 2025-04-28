@@ -17,7 +17,7 @@ spec:
      service:
        type: LoadBalancer
      volumeClaimTemplate:
-       storageClassName: gp2
+       storageClassName: ebs-sc
      persistence:
        labels:
          enabled: true

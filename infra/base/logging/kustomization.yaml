@@ -6,6 +6,7 @@ namespace: logging
 resources:
   - namespace.yaml
   - elasticsearch.yaml
+  - kibana.yaml
 
 commonLabels:
   app.kubernetes.io/component: logging
