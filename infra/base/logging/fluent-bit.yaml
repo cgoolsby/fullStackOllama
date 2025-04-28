@@ -1,0 +1,27 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: fluent-bit
+  namespace: logging
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: fluent-bit
+      version: "0.39.0"
+      sourceRef:
+        kind: HelmRepository
+        name: fluent
+        namespace: flux-system
+  values:
+    env:
+      - name: ELASTICSEARCH_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-master-credentials
+            key: username
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-master-credentials
+            key: password
