@@ -17,8 +17,3 @@ spec:
     elasticsearchHosts: "http://elasticsearch-master:9200"
     service:
       type: LoadBalancer
-    kibanaConfig:
-      kibana.yml:
-        server.name: kibana
-        server.host: "0.0.0.0"
-        elasticsearch.hosts: ["http://elasticsearch-master:9200"]
