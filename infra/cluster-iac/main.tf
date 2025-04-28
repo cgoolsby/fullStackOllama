@@ -94,6 +94,8 @@ module "eks" {
         instance_types = ["g4dn.xlarge"] # GPU instance type
         capacity_type  = "ON_DEMAND"
 
+        ami_type = "AL2_x86_64_GPU" # Specify the GPU-enabled AMI
+
         labels = {
           "nvidia.com/gpu" = "true"
         }
