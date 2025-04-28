@@ -50,4 +50,4 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1h
-  url: https://ollama.github.io/helm
+  url: https://ollama.ai/helm
