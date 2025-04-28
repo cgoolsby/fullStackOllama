@@ -16,3 +16,17 @@ spec:
   values:
     service:
       type: LoadBalancer
+    envFrom:
+      - secretRef:
+          name: elasticsearch-master-credentials
+    env:
+      - name: ELASTICSEARCH_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-master-credentials
+            key: username
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-master-credentials
+            key: password
