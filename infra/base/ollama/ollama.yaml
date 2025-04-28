@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ollama
+  namespace: ollama-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ollama
+      version: "0.1.4"  # Latest stable version
+      sourceRef:
+        kind: HelmRepository
+        name: ollama
+        namespace: flux-system
+  values:
+    replicaCount: 1
+    
+    image:
+      repository: ollama/ollama
+      tag: "0.1.27"
+      
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+        nvidia.com/gpu: "1"
+      limits:
+        cpu: "4"
+        memory: "8Gi"
+        nvidia.com/gpu: "1"
+        
+    nodeSelector:
+      nvidia.com/gpu: "true"
+      
+    tolerations:
+    - key: "nvidia.com/gpu"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+      
+    service:
+      type: ClusterIP
+      port: 11434
+      
+    ingress:
+      enabled: false  # We can enable this later if needed
+      
+    persistence:
+      enabled: true
+      size: "50Gi"

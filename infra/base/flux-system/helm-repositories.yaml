@@ -42,3 +42,12 @@ metadata:
 spec:
   interval: 1h
   url: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: ollama
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://ollama.github.io/helm
