@@ -25,3 +25,8 @@ spec:
       config:
         name: gpu-feature-discovery
         version: v0.7.0
+    validator:
+      driver:
+        env:
+        - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
+          value: "true"
