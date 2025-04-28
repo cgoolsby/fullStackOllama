@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: ollama
-      version: "0.1.4"  # Latest stable version
+      version: "0.4.0"  # Latest stable version from community chart
       sourceRef:
         kind: HelmRepository
         name: ollama
@@ -46,6 +46,11 @@ spec:
     ingress:
       enabled: false  # We can enable this later if needed
       
-    persistence:
-      enabled: true
-      size: "50Gi"
+    models:
+      # Pull these models at startup
+      - name: llama2
+        tag: latest
+      - name: mistral
+        tag: latest
+      - name: codellama
+        tag: latest
