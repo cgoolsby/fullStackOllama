@@ -35,7 +35,7 @@ spec:
         [OUTPUT]
             Name es
             Match kube.*
-            Host elasticsearch-master
+            Host https://elasticsearch-master
             Port 9200
             HTTP_User ${ELASTICSEARCH_USERNAME}
             HTTP_Passwd ${ELASTICSEARCH_PASSWORD}
@@ -47,7 +47,6 @@ spec:
             tls On
             tls.verify Off
             tls.debug 1
-            HTTP_SSL On
     env:
       - name: ELASTICSEARCH_USERNAME
         valueFrom:
