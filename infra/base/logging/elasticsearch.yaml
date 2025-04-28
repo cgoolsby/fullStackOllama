@@ -14,10 +14,11 @@ spec:
         name: elastic
         namespace: flux-system
   values:
-     service:
-       type: LoadBalancer
-     volumeClaimTemplate:
-       storageClassName: ebs-sc
-     persistence:
+    replicas: 1
+    service:
+      type: LoadBalancer
+    volumeClaimTemplate:
+      storageClassName: ebs-sc
+    persistence:
        labels:
          enabled: true
