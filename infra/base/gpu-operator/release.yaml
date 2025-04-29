@@ -27,34 +27,28 @@ spec:
             repository: nvcr.io/nvidia/cloud-native/gpu-operator
             tag: v23.9.2
       toolkit:
-        enabled: false # Disable Container Toolkit installation
+        enabled: false # Use pre-installed toolkit from AMI
       validator:
-    validator:
-      driver:
-        env:
-        - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
-          value: "true"
-        image:
-          repository: nvcr.io/nvidia/cloud-native/gpu-operator-validator
-          tag: v23.9.2
-        resources:
-          limits:
-            nvidia.com/gpu: 1
-          requests:
-            cpu: 100m
-            memory: 128Mi
-    
+        enabled: false # Disable validator to avoid GLIBC issues
+
     driver:
-      enabled: false # <<< Driver is preinstalled on AMI
+      enabled: false # Driver is preinstalled on AMI
+    
+    toolkit:
+      enabled: false # Toolkit is preinstalled on AMI
+    
+    devicePlugin:
+      enabled: true # Only enable the device plugin
+      version: v0.13.0
     
     dcgm:
-      enabled: false # <<< Disable DCGM metrics exporter
+      enabled: false # Disable DCGM metrics exporter
     
     dcgmExporter:
-      enabled: false # <<< Disable DCGM Prometheus exporter
+      enabled: false # Disable DCGM Prometheus exporter
     
     gfd:
-      enabled: false # <<< Disable GPU Feature Discovery
+      enabled: false # Disable GPU Feature Discovery
       
     mig:
       strategy: none # MIG not needed for g4dn.xlarge
@@ -68,10 +62,10 @@ spec:
         effect: NoSchedule
     
     podSecurityPolicy:
-      enabled: false # PSPs are deprecated past 1.25, so no need
+      enabled: false # PSPs are deprecated past 1.25
     
     securityContext:
-      runAsNonRoot: false # defaults OK
+      runAsNonRoot: false
     
     serviceAccount:
       create: true
