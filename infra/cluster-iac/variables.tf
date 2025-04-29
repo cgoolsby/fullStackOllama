@@ -19,7 +19,7 @@ variable "vpc_cidr" {
 variable "enable_gpu_nodes" {
   description = "Whether to enable the GPU node group"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "tags" {

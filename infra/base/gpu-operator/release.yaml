@@ -16,21 +16,71 @@ spec:
   values:
     operator:
       defaultRuntime: containerd
-    driver:
-      enabled: true
-    toolkit:
-      enabled: true
-      version: "v1.13.5-centos7"  # Specify older version compatible with lower GLIBC
-    devicePlugin:
-      enabled: true
-      config:
-        name: gpu-feature-discovery
-        version: v0.7.0
-    gfd:
-      enabled: true
-      migStrategy: "none"
+      runtimeClass: nvidia
+      initContainer:
+        image:
+          repository: nvcr.io/nvidia/cloud-native/k8s-driver-manager
+          tag: v0.7.0  # default at time of writing
+      controller:
+        manager:
+          image:
+            repository: nvcr.io/nvidia/cloud-native/gpu-operator
+            tag: v23.9.2
+      toolkit:
+        enabled: false # Disable Container Toolkit installation
+      validator:
     validator:
       driver:
         env:
         - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
           value: "true"
+        image:
+          repository: nvcr.io/nvidia/cloud-native/gpu-operator-validator
+          tag: v23.9.2
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+          requests:
+            cpu: 100m
+            memory: 128Mi
+    
+    driver:
+      enabled: false # <<< Driver is preinstalled on AMI
+    
+    dcgm:
+      enabled: false # <<< Disable DCGM metrics exporter
+    
+    dcgmExporter:
+      enabled: false # <<< Disable DCGM Prometheus exporter
+    
+    gfd:
+      enabled: false # <<< Disable GPU Feature Discovery
+      
+    mig:
+      strategy: none # MIG not needed for g4dn.xlarge
+    
+    nodeSelector:
+      nvidia.com/gpu.present: "true"
+    
+    tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+    
+    podSecurityPolicy:
+      enabled: false # PSPs are deprecated past 1.25, so no need
+    
+    securityContext:
+      runAsNonRoot: false # defaults OK
+    
+    serviceAccount:
+      create: true
+      name: ""
+    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
