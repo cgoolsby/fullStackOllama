@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-ollama-test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:latest
+      command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Sending test POST to Ollama service...";
+          curl -s http://ollama:11434/api/generate -d '{
+            "model": "llama2",
+            "prompt": "Why is the sky blue?"
+          }' | tee /tmp/output.txt;
+          echo "Finished curl test. Output stored at /tmp/output.txt"
