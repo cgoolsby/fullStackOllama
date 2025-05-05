@@ -45,6 +45,7 @@ resource "aws_iam_policy" "karpenter_controller" {
           "ec2:CreateTags",
           "ec2:TerminateInstances",
           "ec2:DescribeLaunchTemplates",
+          "ec2:DeleteLaunchTemplate",
           "ec2:DescribeInstances",
           "ec2:DescribeSecurityGroups",
           "ec2:DescribeSubnets",
@@ -56,6 +57,11 @@ resource "aws_iam_policy" "karpenter_controller" {
           "ssm:GetParameter"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = ["iam:PassRole"]
+        Resource = [aws_iam_role.karpenter_role.arn]
       }
     ]
   })

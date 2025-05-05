@@ -113,5 +113,14 @@ module "eks" {
     } : {}
   )
 
+  # Tag cluster security group for Karpenter discovery
+  cluster_security_group_tags = {
+    "karpenter.sh/discovery" = true
+  }
+
+  node_security_group_tags = {
+    "karpenter.sh/discovery" = true
+  }
+
   tags = var.tags
 }

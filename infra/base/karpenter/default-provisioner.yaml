@@ -1,0 +1,42 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  requirements:
+    - key: karpenter.k8s.aws/instance-category
+      operator: In
+      values: ["c", "m", "r", "t"]
+    - key: karpenter.k8s.aws/instance-generation
+      operator: Gt
+      values: ["2"]
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["t3.large", "t3.xlarge", "m5.large", "m5.xlarge", "c5.large", "c5.xlarge"]
+  limits:
+    resources:
+      cpu: 1000
+      memory: 1000Gi
+  providerRef:
+    name: default
+  ttlSecondsAfterEmpty: 30
+  ttlSecondsUntilExpired: 604800
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: default
+spec:
+  subnetSelector:
+    karpenter.sh/discovery: "true"
+  securityGroupSelector:
+    karpenter.sh/discovery: "true"
+  tags:
+    KarpenterManaged: "true"
+    Environment: production
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 50Gi
+        volumeType: gp3
+        deleteOnTermination: true
