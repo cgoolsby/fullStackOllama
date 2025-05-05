@@ -14,10 +14,8 @@ spec:
         name: karpenter
         namespace: flux-system
   values:
-    settings:
-      clusterName: ${CLUSTER_NAME}
-      clusterEndpoint: ${CLUSTER_ENDPOINT}
-      interruptionQueue: karpenter-interruption-queue
+    clusterName: ${CLUSTER_NAME}
+    clusterEndpoint: ${CLUSTER_ENDPOINT}
     serviceAccount:
       annotations:
         eks.amazonaws.com/role-arn: ${KARPENTER_ROLE_ARN}
