@@ -48,7 +48,8 @@ spec:
       models:
         pull:
         # Pull these models at startup
-        - llama4
+        - llama3.2
+        - mistral
 
     persistentVolume:
       enabled: true
