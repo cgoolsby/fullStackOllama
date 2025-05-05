@@ -31,10 +31,8 @@ resource "aws_iam_instance_profile" "karpenter" {
   role = aws_iam_role.karpenter_role.name
 }
 
-resource "aws_iam_role_policy" "karpenter_controller" {
-  name = "karpenter-controller-policy"
-  role = aws_iam_role.karpenter_role.id
-
+resource "aws_iam_policy" "karpenter_controller" {
+  name = "KarpenterController-${var.cluster_name}"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -60,5 +58,27 @@ resource "aws_iam_role_policy" "karpenter_controller" {
         Resource = "*"
       }
     ]
+  })
+}
+
+module "karpenter_controller_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.20"
+
+  role_name = "karpenter-controller-${var.cluster_name}"
+
+  role_policy_arns = {
+    karpenter = aws_iam_policy.karpenter_controller.arn
+  }
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["karpenter:karpenter"]
+    }
+  }
+
+  tags = merge(var.tags, {
+    Name = "karpenter-controller-${var.cluster_name}"
   })
 }

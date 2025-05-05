@@ -48,7 +48,8 @@ resource "kubernetes_config_map" "terraform_outputs" {
     EBS_CSI_ROLE_ARN   = aws_iam_role.ebs_csi_role.arn
     CLUSTER_NAME        = var.cluster_name
     CLUSTER_ENDPOINT    = module.eks.cluster_endpoint
-    KARPENTER_ROLE_ARN = aws_iam_role.karpenter_role.arn
+    KARPENTER_ROLE_ARN = module.karpenter_controller_irsa.iam_role_arn
+    KARPENTER_INSTANCE_PROFILE = aws_iam_instance_profile.karpenter.name
   }
 
   depends_on = [

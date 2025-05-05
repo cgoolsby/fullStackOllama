@@ -17,8 +17,12 @@ spec:
     clusterName: ${CLUSTER_NAME}
     clusterEndpoint: ${CLUSTER_ENDPOINT}
     serviceAccount:
+      create: true
+      name: karpenter
       annotations:
         eks.amazonaws.com/role-arn: ${KARPENTER_ROLE_ARN}
+    aws:
+      defaultInstanceProfile: ${KARPENTER_INSTANCE_PROFILE}
     nodePoolConfig:
       labels:
         type: karpenter

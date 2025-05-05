@@ -4,3 +4,4 @@ namespace: karpenter
 resources:
   - namespace.yaml
   - release.yaml
+  - gpu-provisioner.yaml

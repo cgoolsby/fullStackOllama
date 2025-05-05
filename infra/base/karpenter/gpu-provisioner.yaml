@@ -1,4 +1,4 @@
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1alpha5
 kind: Provisioner
 metadata:
   name: gpu-default

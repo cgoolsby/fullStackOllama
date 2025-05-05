@@ -32,3 +32,13 @@ output "ebs_csi_role_arn" {
   description = "ARN of IAM role for EBS CSI driver"
   value       = aws_iam_role.ebs_csi_role.arn
 }
+
+output "karpenter_controller_role_arn" {
+  description = "ARN of the Karpenter controller IAM role"
+  value       = module.karpenter_controller_irsa.iam_role_arn
+}
+
+output "karpenter_instance_profile_name" {
+  description = "Name of the Karpenter IAM instance profile"
+  value       = aws_iam_instance_profile.karpenter.name
+}
