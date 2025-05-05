@@ -51,3 +51,10 @@ spec:
         - llama2
         - mistral
         - codellama
+
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: gp3
+      accessModes:
+        - ReadWriteOnce
