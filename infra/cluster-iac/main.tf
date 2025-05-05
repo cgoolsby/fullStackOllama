@@ -44,8 +44,11 @@ resource "kubernetes_config_map" "terraform_outputs" {
   }
 
   data = {
-    AWS_ACCOUNT_ID    = data.aws_caller_identity.current.account_id
-    EBS_CSI_ROLE_ARN = aws_iam_role.ebs_csi_role.arn
+    AWS_ACCOUNT_ID      = data.aws_caller_identity.current.account_id
+    EBS_CSI_ROLE_ARN   = aws_iam_role.ebs_csi_role.arn
+    CLUSTER_NAME        = var.cluster_name
+    CLUSTER_ENDPOINT    = module.eks.cluster_endpoint
+    KARPENTER_ROLE_ARN = aws_iam_role.karpenter_role.arn
   }
 
   depends_on = [
