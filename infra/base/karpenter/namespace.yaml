@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: karpenter
+  labels:
+    app.kubernetes.io/name: karpenter
+    app.kubernetes.io/part-of: karpenter

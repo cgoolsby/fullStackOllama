@@ -51,3 +51,12 @@ metadata:
 spec:
   interval: 1h
   url: https://otwld.github.io/ollama-helm/
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: karpenter
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://charts.karpenter.sh

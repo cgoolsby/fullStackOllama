@@ -1,0 +1,42 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: gpu-default
+spec:
+  requirements:
+    - key: karpenter.k8s.aws/instance-category
+      operator: In
+      values: ["g", "p"]
+    - key: karpenter.k8s.aws/instance-generation
+      operator: Gt
+      values: ["4"]
+    - key: "nvidia.com/gpu"
+      operator: Exists
+  limits:
+    resources:
+      cpu: 1000
+      memory: 1000Gi
+      "nvidia.com/gpu": 100
+  providerRef:
+    name: gpu-default
+  ttlSecondsAfterEmpty: 30
+  ttlSecondsUntilExpired: 604800
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: gpu-default
+spec:
+  subnetSelector:
+    karpenter.sh/discovery: "true"
+  securityGroupSelector:
+    karpenter.sh/discovery: "true"
+  tags:
+    KarpenterManaged: "true"
+    Environment: production
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 100Gi
+        volumeType: gp3
+        deleteOnTermination: true
