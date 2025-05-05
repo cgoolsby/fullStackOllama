@@ -52,9 +52,5 @@ spec:
         - mistral
         - codellama
 
-    persistence:
+    persistenceVolume:
       enabled: true
-      size: 50Gi
-      storageClass: gp3
-      accessModes:
-        - ReadWriteOnce
