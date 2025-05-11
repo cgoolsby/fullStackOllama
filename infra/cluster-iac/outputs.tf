@@ -8,11 +8,6 @@ output "cluster_endpoint" {
   value       = module.eks.cluster_endpoint
 }
 
-output "karpenter_role_arn" {
-  description = "IAM role ARN for Karpenter"
-  value       = aws_iam_role.karpenter_role.arn
-}
-
 output "cluster_security_group_id" {
   description = "Security group ID attached to the EKS cluster"
   value       = module.eks.cluster_security_group_id

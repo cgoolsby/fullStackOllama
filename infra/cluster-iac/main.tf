@@ -36,28 +36,6 @@ provider "kubernetes" {
 # Get AWS account ID
 data "aws_caller_identity" "current" {}
 
-# Create ConfigMap for Terraform outputs
-resource "kubernetes_config_map" "terraform_outputs" {
-  metadata {
-    name      = "terraform-outputs"
-    namespace = "flux-system"
-  }
-
-  data = {
-    AWS_ACCOUNT_ID      = data.aws_caller_identity.current.account_id
-    EBS_CSI_ROLE_ARN   = aws_iam_role.ebs_csi_role.arn
-    CLUSTER_NAME        = var.cluster_name
-    CLUSTER_ENDPOINT    = module.eks.cluster_endpoint
-    KARPENTER_ROLE_ARN = module.karpenter_controller_irsa.iam_role_arn
-    KARPENTER_INSTANCE_PROFILE = aws_iam_instance_profile.karpenter.name
-  }
-
-  depends_on = [
-    module.eks,
-    kubernetes_namespace.flux_system
-  ]
-}
-
 # EKS Cluster
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
