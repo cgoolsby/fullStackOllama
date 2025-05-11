@@ -12,8 +12,19 @@ resource "kubernetes_config_map" "terraform_outputs" {
     CLUSTER_ENDPOINT   = module.eks.cluster_endpoint
   }
 
+  lifecycle {
+    # Only ignore changes that would prevent deletion, not data updates
+    ignore_changes = [
+      metadata[0].annotations,
+      metadata[0].labels,
+      metadata[0].generation,
+      metadata[0].resource_version
+    ]
+    prevent_destroy = false
+  }
+
   depends_on = [
     module.eks,
-    kubernetes_namespace.flux_system
+    null_resource.create_flux_ns
   ]
 }
